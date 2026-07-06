@@ -12,6 +12,7 @@ CREATE TABLE `user_oauth_identities` (
 --> statement-breakpoint
 CREATE UNIQUE INDEX `user_oauth_identities_provider_unique_idx` ON `user_oauth_identities` (`provider`,`provider_id`);--> statement-breakpoint
 CREATE INDEX `user_oauth_identities_user_idx` ON `user_oauth_identities` (`user_id`);--> statement-breakpoint
+ALTER TABLE `users` ADD `ai_gateway_enabled` integer;--> statement-breakpoint
 INSERT INTO `user_oauth_identities` (`id`, `user_id`, `provider`, `provider_id`, `email`, `email_verified`, `created_at`, `updated_at`)
 SELECT lower(hex(randomblob(16))), `id`, `provider`, `provider_id`, `email`, `email_verified`, `created_at`, `updated_at`
 FROM `users`

@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "f9622a01-cf33-4d6f-ab81-03c0bd37d6cc",
-  "prevId": "f52d3fab-413d-46ac-b94a-c4895c231b69",
+  "id": "a843d7b0-16ae-4cb1-8fa3-3c2227330cfa",
+  "prevId": "d5fd9fcc-906c-4a40-abfc-06c4aa9e20e2",
   "tables": {
     "ai_gateways": {
       "name": "ai_gateways",
@@ -796,6 +796,14 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "preview_version": {
+          "name": "preview_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
         },
         "screenshot_url": {
           "name": "screenshot_url",

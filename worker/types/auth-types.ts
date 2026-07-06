@@ -63,6 +63,15 @@ export interface AuthUserSession {
 }
 
 /**
+ * Session response returned to clients after authentication
+ */
+export interface SessionResponse {
+	user: AuthUser;
+	sessionId: string;
+	expiresAt: Date | null;
+}
+
+/**
  * Authentication result from login/register operations
  */
 export interface AuthResult extends AuthUserSession {

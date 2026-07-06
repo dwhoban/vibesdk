@@ -2,7 +2,7 @@
  * Centralized Authentication Utilities
  */
 
-import type {  AuthUser } from '../types/auth-types';
+import type {  AuthUser, SessionResponse } from '../types/auth-types';
 import type { User } from '../database/schema';
 import { createLogger } from '../logger';
 import { SecurityError, SecurityErrorType } from 'shared/types/errors';
@@ -265,14 +265,7 @@ export function extractRequestMetadata(request: Request): RequestMetadata {
 	};
 }
 
-/**
- * Create session response
- */
-export interface SessionResponse {
-	user: AuthUser;
-    sessionId: string;
-    expiresAt: Date | null;
-}
+export type { SessionResponse } from '../types/auth-types';
 
 export function mapUserResponse(
 	user: (Partial<User> & { id: string; email: string }) | AuthUser,
