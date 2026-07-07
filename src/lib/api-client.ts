@@ -15,6 +15,7 @@ import type{
 	AppDetailsData,
 	AppStarToggleData,
 	GitCloneTokenData,
+	PreviewTokenData,
 	UserAppsData,
 	ProfileUpdateData,
 	UserStatsData,
@@ -558,6 +559,18 @@ class ApiClient {
 		appId: string,
 	): Promise<ApiResponse<GitCloneTokenData>> {
 		return this.request<GitCloneTokenData>(`/api/apps/${appId}/git/token`, {
+			method: 'POST',
+		});
+	}
+
+	/**
+	 * Generate a short-lived owner-preview token so the owner can open a
+	 * private deployed app's URL on a preview subdomain.
+	 */
+	async generatePreviewToken(
+		appId: string,
+	): Promise<ApiResponse<PreviewTokenData>> {
+		return this.request<PreviewTokenData>(`/api/apps/${appId}/preview-token`, {
 			method: 'POST',
 		});
 	}

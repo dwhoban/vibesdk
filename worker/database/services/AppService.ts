@@ -546,6 +546,35 @@ export class AppService extends BaseService {
         return { success: true, app: updatedApps[0] };
     }
 
+    /**
+     * Resolve the owning app for a deployed worker by its deployment id
+     * (the subdomain used by the dispatch namespace equals `deploymentId`).
+     *
+     * Reads from the PRIMARY DB (not a read replica) with NO caching so that a
+     * just-toggled `visibility` is observed on the very next dispatch request
+     * (meets the <1s public->private revocation requirement). This is a single
+     * indexed lookup on `deployment_id`.
+     */
+    async getAppOwnershipByDeploymentId(
+        deploymentId: string
+    ): Promise<{ id: string; userId: string | null; visibility: 'private' | 'public' } | null> {
+        const row = await this.database
+            .select({
+                id: schema.apps.id,
+                userId: schema.apps.userId,
+                visibility: schema.apps.visibility,
+            })
+            .from(schema.apps)
+            .where(eq(schema.apps.deploymentId, deploymentId))
+            .limit(1);
+
+        if (row.length === 0) {
+            return null;
+        }
+
+        return row[0];
+    }
+
     // ========================================
     // APP VIEW CONTROLLER OPERATIONS
     // ========================================

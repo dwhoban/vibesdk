@@ -113,6 +113,31 @@ export function DeploymentControls({
 		onDeploy(instanceId);
 	};
 
+	const handleViewLive = async () => {
+		if (!deploymentUrl) return;
+
+		// Public apps (or missing appId): open the deployed URL directly.
+		if (localVisibility !== 'private' || !appId) {
+			window.open(deploymentUrl, '_blank');
+			return;
+		}
+
+		// Private apps are gated at the dispatch layer, so mint a short-lived,
+		// deployment-scoped owner-preview token and open the tokenized URL.
+		try {
+			const response = await apiClient.generatePreviewToken(appId);
+			if (response.success && response.data) {
+				window.open(response.data.previewUrl, '_blank');
+				return;
+			}
+		} catch (error) {
+			console.error('Failed to generate owner preview token:', error);
+		}
+
+		// Fallback: attempt the raw URL.
+		window.open(deploymentUrl, '_blank');
+	};
+
 	const handleToggleVisibility = async () => {
 		if (!appId) {
 			toast.error('App ID not found');
@@ -358,7 +383,7 @@ export function DeploymentControls({
 					)}>
 						{/* View Live Site Button */}
 						<Button
-							onClick={() => deploymentUrl && window.open(deploymentUrl, '_blank')}
+							onClick={handleViewLive}
 							variant="primary"
 							className="h-10 text-sm bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white border-green-600 dark:border-green-700 font-medium shadow-sm hover:shadow-md dark:hover:shadow-green-900/50 transition-all duration-200 hover:scale-[1.02]"
 						>
